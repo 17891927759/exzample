@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 命名空间，相当于包，   任意唯一：通常可以设置成类的全限定名com.bw.entity.Dept   -->
+<mapper namespace="com.bw.mapper.TypeMapper">
+
+	<resultMap type="Type" id="baseMap">
+		<id property="tid" column="tid"/>
+		<result property="tname" column="tname"/>
+	</resultMap>
+	
+	
+	<!-- 根据部门号查询部门信息 -->
+	<select id="getAll" resultType="Type">
+		select * from type
+	</select>
+	
+	
+	
+</mapper>

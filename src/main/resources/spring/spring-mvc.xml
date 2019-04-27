@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+http://www.springframework.org/schema/context 
+http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+http://www.springframework.org/schema/mvc 
+http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+	<!-- 自动扫描(自动注入) -->
+	<!-- base-package 通配符写法 <context:component-scan base-package="com.*" /> 
+		<context:component-scan base-package="com.*.dao" /> <context:component-scan 
+		base-package="com.**.dao" /> com.a.b.c.dao com.a.dao// “**”标示不确定层包通配 <context:component-scan 
+		base-package="com.*dao" /> // “*dao”以dao结尾的包通配 @Controller @Service -->
+
+
+
+	<!-- <context:component-scan base-package="com.**.controller,com.**.biz,com.**.service" 
+		/> -->
+	<!-- @Controller -->
+	<context:component-scan
+		base-package="com.**.controller,com.**.action,com.**.handler" />
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	     <property name="maxUploadSize" value="104857600" />
+	     <property name="defaultEncoding" value="UTF-8"></property>
+	</bean>
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes" value="text/html;charset=UTF-8" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<!--  <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.bw.interceptor.LoginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>  -->
+
+</beans>

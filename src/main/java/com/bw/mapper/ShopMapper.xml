@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 命名空间，相当于包，   任意唯一：通常可以设置成类的全限定名com.bw.entity.Dept   -->
+<mapper namespace="com.bw.mapper.ShopMapper">
+
+	<resultMap type="Shop" id="baseMap">
+		<id property="sid" column="sid"/>
+		<result property="photo" column="photo"/>
+		<result property="name" column="name"/>
+		<result property="content" column="content"/>
+		<result property="price" column="price"/>
+		<result property="crtime" column="crtime"/>
+		<result property="uptime" column="uptime"/>
+		<result property="state" column="state"/>
+	</resultMap>
+	<resultMap type="Shop" id="with" extends="baseMap">
+		<association property="type" resultMap="com.bw.mapper.TypeMapper.baseMap"></association>
+	</resultMap>
+	<sql id="searchSql">
+		<where>
+			<if test="conditions.name!=null and conditions.name.trim()!=''">
+				and shop.name like '%${conditions.name}%' or shop.content like '%${conditions.name}%'
+			</if>
+			<if test="conditions.crtime!=null and conditions.crtime.trim()!=''">
+				and shop.crtime >= #{conditions.crtime}
+			</if>
+			<if test="conditions.uptime!=null and conditions.uptime.trim()!=''">
+				and shop.uptime &lt;= #{conditions.uptime}
+			</if>
+		</where>
+	</sql>
+	<!-- 根据部门号查询部门信息 -->
+	<select id="getpageconditions" parameterType="com.bw.entity.Page" resultMap="with">
+		select * from shop left join type on shop.tid=type.tid 
+		<include refid="searchSql"></include> 
+		limit #{start},#{pageSize}
+	</select>
+	<select id="getCount" parameterType="com.bw.entity.Page" resultType="int">
+		select count(1) from shop left join type on shop.tid=type.tid 
+		<include refid="searchSql"></include>
+	</select>
+	<delete id="delete" parameterType="String">
+		delete from shop where sid in(${value})
+	</delete>
+	<insert id="add" parameterType="Shop">
+		INSERT INTO `bb`.`shop` ( `photo`, `name`, `content`, `price`, `crtime`,`uptime`, `state`, `tid`) VALUES (#{photo},#{name}, #{content},#{price},now(),now(),#{state}, #{type.tid});
+	</insert>
+	
+</mapper>
